@@ -1,13 +1,17 @@
-import express, { Request, Response } from 'express';
+import express from 'express'
+import connectToDatabase from './models/connection'
+import { devRoute } from './routes'
 
-const app = express();
+const app = express()
 
-app.get('/', (_req: Request, res: Response): Response => {
-  return res.json({
-    message: 'Iniciando Back-End do Projeto'
+app.use(express.json())
+app.use(devRoute)
+
+connectToDatabase().then(() => {
+  app.listen(3001, () => {
+    console.log('Servidor rodando na porta 3001.')
   })
 })
-
-app.listen(3001, () => {
-  console.log('Servidor rodando na porta 3001.')
+.catch((error) => {
+  console.error(error)
 })
